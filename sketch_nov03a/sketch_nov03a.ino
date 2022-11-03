@@ -4,11 +4,12 @@
 #include <DHT.h>
 #include <DHT_U.h>
 #include <LiquidCrystal.h>
+//Adicionando Bibliotecas
 
-#define DHTPIN 12
-#define DHTTYPE DHT11
+#define DHTPIN 12 //Definindo Pino Digital do Sensor DHT11
+#define DHTTYPE DHT11 //Definindo tipo do sensor
 
-LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7); //Definindo Pinos do LCD
 DHT dht (DHTPIN, DHTTYPE);
 
 byte grau[8] ={ B00001100,            
@@ -22,41 +23,43 @@ byte grau[8] ={ B00001100,
 
 void setup() {
 
- lcd.begin(16,2);  
+ lcd.begin(16,2);  //Iniciando o LCD
  lcd.clear();                                              
- lcd.createChar(0, grau);              
- dht.begin();
- pinMode(12, OUTPUT);
- Serial.begin(9600);
+ lcd.createChar(0, grau); //Criando o símbolo de grau              
+ dht.begin(); //Iniciando o DHT
+ pinMode(12, OUTPUT); //Definindo o pino de saída de dados
+ Serial.begin(9600); //Definindo em qual monitor serial vão aparecer os dados
 }
 
 void loop() {
   
-  float t = dht.readTemperature();      
-  float h = dht.readHumidity();        
-  lcd.setCursor(0,0);                  
-  lcd.print("Temp: ");                  
+  float t = dht.readTemperature(); //Criar variável de temperatura      
+  float h = dht.readHumidity();  //Criar variável de umidade  
+        
+  lcd.setCursor(0,0);  //Posicionando as informações no LCD                  
+  lcd.print("Temp: ");  //Printando o que vai aparecer                  
   lcd.print(" ");                      
-  lcd.setCursor(7,0);                  
-  lcd.print(t,1);                      
+  lcd.setCursor(7,0);  //Posicionando as informações no LCD                  
+  lcd.print(t,2);  //Printando a Temperatura com 2 casas decimais                      
   lcd.setCursor(12,0);                
-  lcd.write((byte)0);                  
-  lcd.print("C");                      
+  lcd.write((byte)0); //Printando o símbolo de grau                  
+  lcd.print("C"); //Printando o que vai aparecer                      
  
-  lcd.setCursor(0,1);                    
-  lcd.print("Umid: ");                  
+  lcd.setCursor(0,1);  //Posicionando as informações no LCD                  
+  lcd.print("Umid: ");  //Printando o que vai aparecer                
   lcd.print(" ");                        
-  lcd.setCursor(7,1);                    
-  lcd.print(h,1);                        
-  lcd.setCursor(12,1);                    
-  lcd.print("%");     
+  lcd.setCursor(7,1); //Posicionando as informações no LCD                     
+  lcd.print(h,2);  //Printando a Umidade com 2 casas decimais                      
+  lcd.setCursor(12,1); //Posicionando as informações no LCD                   
+  lcd.print("%"); //Printando o símbolo de porcentagem    
 
-  Serial.begin(9600);
-  char c = Serial.read();
+  Serial.begin(9600);  //Definindo em qual monitor serial vão aparecer os dados
+  char c = Serial.read(); //Ler variavel na serial
  
   if (c == 'b'){
     digitalWrite(12, LOW);
     Serial.println("ERRO");
+    //Caso digite b, a serial da erro, serve como ponto de parada
   }
   else{
     digitalWrite(12, HIGH);
@@ -64,7 +67,8 @@ void loop() {
     Serial.println(t);
     Serial.print("Umid: ");
     Serial.println(h);
+    //Caso não digite nada, se mostra naturalmente os dados
   }
                 
-  delay(60000);
+  delay(60000); //Intervalo de leitura dos dados
   }
